@@ -375,6 +375,7 @@ if ( class_exists( 'WP_REST_Controller' ) ) {
 		 * Example:.../wp-json/pmpro/v1/export/start
 		 *
 		 * @since 3.7
+		 * @since TBD Added the `$return_raw` and `$limit_override` parameters.
 		 */
 		register_rest_route( $pmpro_namespace, '/export/start',
 			array(
@@ -1706,10 +1707,12 @@ if ( class_exists( 'WP_REST_Controller' ) ) {
 		 *
 		 * @since 3.7
 		 *
-		 * @param WP_REST_Request $request The REST request.
+		 * @param WP_REST_Request $request        The REST request.
+		 * @param bool            $return_raw     Whether to return structured results instead of rendering HTML. Default false.
+		 * @param int|null        $limit_override Optional maximum number of results per group.
 		 * @return WP_REST_Response The REST response.
 		 */
-		public function pmpro_rest_api_quick_search( $request ) {
+		public function pmpro_rest_api_quick_search( $request, $return_raw = false, $limit_override = null ) {
 			global $wpdb;
 
 			$params = $request->get_params();
@@ -1730,7 +1733,9 @@ if ( class_exists( 'WP_REST_Controller' ) ) {
 			if ( ! in_array( $type, $allowed_types, true ) ) {
 				$type = 'all';
 			}
-			$limit = ( 'all' === $type ) ? $limit_default : $limit_specific;
+			$limit = null === $limit_override
+				? ( ( 'all' === $type ) ? $limit_default : $limit_specific )
+				: max( 1, min( 20, (int) $limit_override ) );
 
 			// Build an array of results to return. Each result will be a link.
 			$results = array();
@@ -2100,6 +2105,10 @@ if ( class_exists( 'WP_REST_Controller' ) ) {
 					'icon'  => 'dashicons-search',
 					'new_tab' => true,
 				);
+			}
+
+			if ( $return_raw ) {
+				return new WP_REST_Response( $results, 200 );
 			}
 
 			// Build HTML results.
