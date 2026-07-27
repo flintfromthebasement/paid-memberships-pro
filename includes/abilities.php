@@ -79,15 +79,15 @@ function pmpro_abilities_register_abilities() {
 	}
 
 	$abilities = array(
-		'pmpro/levels-query'              => pmpro_abilities_get_levels_query_definition(),
-		'pmpro/member-memberships-get'    => pmpro_abilities_get_member_memberships_definition(),
-		'pmpro/member-membership-change'  => pmpro_abilities_get_member_membership_change_definition(),
-		'pmpro/member-membership-cancel'  => pmpro_abilities_get_member_membership_cancel_definition(),
-		'pmpro/orders-query'              => pmpro_abilities_get_orders_query_definition(),
-		'pmpro/order-get'                 => pmpro_abilities_get_order_get_definition(),
-		'pmpro/subscriptions-query'       => pmpro_abilities_get_subscriptions_query_definition(),
-		'pmpro/subscription-get'          => pmpro_abilities_get_subscription_get_definition(),
-		'pmpro/search-query'              => pmpro_abilities_get_search_query_definition(),
+		'pmpro/levels-query'             => pmpro_abilities_get_levels_query_definition(),
+		'pmpro/member-memberships-get'   => pmpro_abilities_get_member_memberships_definition(),
+		'pmpro/member-membership-change' => pmpro_abilities_get_member_membership_change_definition(),
+		'pmpro/member-membership-cancel' => pmpro_abilities_get_member_membership_cancel_definition(),
+		'pmpro/orders-query'             => pmpro_abilities_get_orders_query_definition(),
+		'pmpro/order-get'                => pmpro_abilities_get_order_get_definition(),
+		'pmpro/subscriptions-query'      => pmpro_abilities_get_subscriptions_query_definition(),
+		'pmpro/subscription-get'         => pmpro_abilities_get_subscription_get_definition(),
+		'pmpro/search-query'             => pmpro_abilities_get_search_query_definition(),
 	);
 
 	foreach ( $abilities as $name => $args ) {
@@ -129,17 +129,17 @@ function pmpro_abilities_get_list_output_schema( $item_schema ) {
 	return array(
 		'type'       => 'object',
 		'properties' => array(
-			'items'  => array(
+			'items'    => array(
 				'type'  => 'array',
 				'items' => $item_schema,
 			),
-			'total'  => array(
+			'total'    => array(
 				'type' => 'integer',
 			),
-			'page'   => array(
+			'page'     => array(
 				'type' => 'integer',
 			),
-			'limit'  => array(
+			'per_page' => array(
 				'type' => 'integer',
 			),
 		),
@@ -268,7 +268,7 @@ function pmpro_abilities_get_levels_query_definition() {
 			'default'    => array(
 				'include_hidden' => false,
 				'query'          => '',
-				'limit'          => 20,
+				'per_page'       => 20,
 				'page'           => 1,
 			),
 			'properties' => array(
@@ -278,7 +278,7 @@ function pmpro_abilities_get_levels_query_definition() {
 				'query'          => array(
 					'type' => 'string',
 				),
-				'limit'          => array(
+				'per_page'       => array(
 					'type'    => 'integer',
 					'minimum' => 1,
 					'maximum' => 50,
@@ -324,8 +324,8 @@ function pmpro_abilities_get_member_memberships_definition() {
 		'output_schema'       => array(
 			'type'       => 'object',
 			'properties' => array(
-				'user_id'      => array( 'type' => 'integer' ),
-				'memberships'  => array(
+				'user_id'          => array( 'type' => 'integer' ),
+				'memberships'      => array(
 					'type'  => 'array',
 					'items' => pmpro_abilities_get_member_level_schema(),
 				),
@@ -406,7 +406,7 @@ function pmpro_abilities_get_member_membership_cancel_definition() {
 		'input_schema'        => array(
 			'type'       => 'object',
 			'properties' => array(
-				'user_id' => array( 'type' => 'integer' ),
+				'user_id'  => array( 'type' => 'integer' ),
 				'level_id' => array( 'type' => 'integer' ),
 			),
 			'required'   => array( 'user_id', 'level_id' ),
@@ -454,15 +454,15 @@ function pmpro_abilities_get_orders_query_definition() {
 		'input_schema'        => array(
 			'type'       => 'object',
 			'default'    => array(
-				'limit' => 20,
-				'page'  => 1,
+				'per_page' => 20,
+				'page'     => 1,
 			),
 			'properties' => array(
 				'user_id'             => array( 'type' => 'integer' ),
 				'membership_level_id' => array( 'type' => 'integer' ),
 				'status'              => array( 'type' => 'string' ),
 				'gateway'             => array( 'type' => 'string' ),
-				'limit'               => array(
+				'per_page'            => array(
 					'type'    => 'integer',
 					'minimum' => 1,
 					'maximum' => 50,
@@ -529,15 +529,15 @@ function pmpro_abilities_get_subscriptions_query_definition() {
 		'input_schema'        => array(
 			'type'       => 'object',
 			'default'    => array(
-				'limit' => 20,
-				'page'  => 1,
+				'per_page' => 20,
+				'page'     => 1,
 			),
 			'properties' => array(
 				'user_id'             => array( 'type' => 'integer' ),
 				'membership_level_id' => array( 'type' => 'integer' ),
 				'status'              => array( 'type' => 'string' ),
 				'gateway'             => array( 'type' => 'string' ),
-				'limit'               => array(
+				'per_page'            => array(
 					'type'    => 'integer',
 					'minimum' => 1,
 					'maximum' => 50,
@@ -604,14 +604,14 @@ function pmpro_abilities_get_search_query_definition() {
 		'input_schema'        => array(
 			'type'       => 'object',
 			'properties' => array(
-				'query' => array(
+				'query'    => array(
 					'type' => 'string',
 				),
-				'scope' => array(
+				'scope'    => array(
 					'type' => 'string',
 					'enum' => array( 'all', 'users', 'subscriptions', 'orders', 'reports', 'levels', 'discount_codes' ),
 				),
-				'limit' => array(
+				'per_page' => array(
 					'type'    => 'integer',
 					'minimum' => 1,
 					'maximum' => 20,
@@ -904,13 +904,13 @@ function pmpro_abilities_execute_levels_query( $input ) {
 		array(
 			'include_hidden' => false,
 			'query'          => '',
-			'limit'          => 20,
+			'per_page'       => 20,
 			'page'           => 1,
 		)
 	);
 	$include_hidden = ! empty( $input['include_hidden'] );
 	$query          = strtolower( trim( (string) $input['query'] ) );
-	$limit          = max( 1, min( 50, (int) $input['limit'] ) );
+	$limit          = max( 1, min( 50, (int) $input['per_page'] ) );
 	$page           = max( 1, (int) $input['page'] );
 	$levels         = array_values( pmpro_getAllLevels( $include_hidden, true ) );
 
@@ -930,10 +930,10 @@ function pmpro_abilities_execute_levels_query( $input ) {
 	$items = array_map( 'pmpro_abilities_normalize_level', pmpro_abilities_slice_items( $levels, $page, $limit ) );
 
 	return array(
-		'items' => $items,
-		'total' => $total,
-		'page'  => $page,
-		'limit' => $limit,
+		'items'    => $items,
+		'total'    => $total,
+		'page'     => $page,
+		'per_page' => $limit,
 	);
 }
 
@@ -1093,12 +1093,12 @@ function pmpro_abilities_execute_orders_query( $input ) {
 	$input = pmpro_abilities_parse_input(
 		$input,
 		array(
-			'limit' => 20,
-			'page'  => 1,
+			'per_page' => 20,
+			'page'     => 1,
 		)
 	);
 	$page   = max( 1, (int) $input['page'] );
-	$limit  = max( 1, min( 50, (int) $input['limit'] ) );
+	$limit  = max( 1, min( 50, (int) $input['per_page'] ) );
 	$offset = ( $page - 1 ) * $limit;
 
 	$query_args = array();
@@ -1128,10 +1128,10 @@ function pmpro_abilities_execute_orders_query( $input ) {
 	);
 
 	return array(
-		'items' => array_map( 'pmpro_abilities_normalize_order', $orders ),
-		'total' => $total,
-		'page'  => $page,
-		'limit' => $limit,
+		'items'    => array_map( 'pmpro_abilities_normalize_order', $orders ),
+		'total'    => $total,
+		'page'     => $page,
+		'per_page' => $limit,
 	);
 }
 
@@ -1174,12 +1174,12 @@ function pmpro_abilities_execute_subscriptions_query( $input ) {
 	$input = pmpro_abilities_parse_input(
 		$input,
 		array(
-			'limit' => 20,
-			'page'  => 1,
+			'per_page' => 20,
+			'page'     => 1,
 		)
 	);
 	$page   = max( 1, (int) $input['page'] );
-	$limit  = max( 1, min( 50, (int) $input['limit'] ) );
+	$limit  = max( 1, min( 50, (int) $input['per_page'] ) );
 	$offset = ( $page - 1 ) * $limit;
 
 	$query_args = array();
@@ -1209,10 +1209,10 @@ function pmpro_abilities_execute_subscriptions_query( $input ) {
 	);
 
 	return array(
-		'items' => array_map( 'pmpro_abilities_normalize_subscription', $subscriptions ),
-		'total' => $total,
-		'page'  => $page,
-		'limit' => $limit,
+		'items'    => array_map( 'pmpro_abilities_normalize_subscription', $subscriptions ),
+		'total'    => $total,
+		'page'     => $page,
+		'per_page' => $limit,
 	);
 }
 
@@ -1261,7 +1261,7 @@ function pmpro_abilities_execute_search_query( $input ) {
 	);
 
 	$scope      = isset( $scope_map[ $input['scope'] ] ) ? $scope_map[ $input['scope'] ] : 'all';
-	$limit      = isset( $input['limit'] ) ? max( 1, min( 20, (int) $input['limit'] ) ) : 10;
+	$limit      = isset( $input['per_page'] ) ? max( 1, min( 20, (int) $input['per_page'] ) ) : 10;
 	$request    = new WP_REST_Request( 'GET', '/pmpro/v1/quick_search' );
 	$request->set_param( 'search', (string) $input['query'] );
 	$request->set_param( 'type', $scope );
