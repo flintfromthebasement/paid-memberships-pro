@@ -201,14 +201,8 @@ class PMPro_Wisdom_Integration {
 			// localhost
 			$this->host_starts_with( $host, 'localhost' ) ||
 
-			// domains starting with
-			$this->host_starts_with( $host, 'stage' ) ||
-			$this->host_starts_with( $host, 'staging' ) ||
-
-			// subdomains
-			$this->host_starts_with( $host, 'dev.' ) ||
-			$this->host_starts_with( $host, 'test.' ) ||
-			$this->host_starts_with( $host, 'testing.' ) ||
+			// environment subdomains
+			$this->host_has_environment_prefix( $host ) ||
 
 			// local tlds
 			$this->host_ends_with( $host, '.test' ) ||
@@ -233,6 +227,17 @@ class PMPro_Wisdom_Integration {
 		}
 
 		return $is_local;
+	}
+
+	/**
+	 * Check whether a hostname starts with an environment label.
+	 *
+	 * @param string $host Hostname to check.
+	 *
+	 * @return bool Whether the hostname starts with an environment label.
+	 */
+	protected function host_has_environment_prefix( $host ) {
+		return (bool) preg_match( '/^(?:dev|stage|staging|test|testing)(?:[.-]|\d+(?:[.-]|$))/', $host );
 	}
 
 	/**
